@@ -1,0 +1,9 @@
+name: custom_feed_migration
+type: module
+description: feed data import from xml file.
+package: custom
+core_version_requirement: ^9 || ^10
+dependencies:
+  - drupal:migrate
+  - drupal:migrate_plus
+  - drupal:migrate_tools

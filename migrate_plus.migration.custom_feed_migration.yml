@@ -1,0 +1,67 @@
+id: custom_feed_migration
+label: "Custom Feed Migration"
+migration_group: custom_feed_group
+status: true
+source:
+  plugin: url
+  data_fetcher_plugin: http
+  data_parser_plugin: simple_xml
+  urls: http://feeds.feedburner.com/ndtvnews-top-stories.xml
+  item_selector: /rss/channel/item
+  fields:
+    - name: guid
+      label: "GUID"
+      selector: guid
+
+    - name: title
+      label: "Title"
+      selector: title
+
+    - name: link
+      label: "Link"
+      selector: link
+
+    - name: updatedAt
+      label: "Updated At"
+      selector: updated_at
+
+    - name: pubDate
+      label: "Published Date"
+      selector: pubDate
+
+    - name: media:content
+      label: "Story Image"
+      selector: 'media:content[''url'']'
+
+    - name: description
+      label: "Description"
+      selector: description
+
+    - name: content:encoded
+      label: "Content"
+      selector: content:encoded
+  ids:
+    guid:
+      type: string
+
+process:
+  field_guid: guid
+  title: title
+  body: description
+  field_content/value: content:encoded
+  field_content/format:
+    plugin: default_value
+    default_value: "full_html"
+  field_link: link
+  field_story_image: media:content['url']
+  created:
+    plugin: callback
+    callable: strtotime
+    source: pubDate
+  changed: 
+    plugin: callback
+    callable: strtotime
+    source: updatedAt
+destination:
+  plugin: "entity:node"
+  default_bundle: article
