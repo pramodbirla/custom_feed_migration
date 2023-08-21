@@ -1,6 +1,6 @@
-id: custom_feed_migration
+id: article
 label: "Custom Feed Migration"
-migration_group: custom_feed_group
+migration_group: content
 status: true
 source:
   plugin: url
@@ -31,7 +31,7 @@ source:
 
     - name: media:content
       label: "Story Image"
-      selector: 'media:content[''url'']'
+      selector: media:content
 
     - name: description
       label: "Description"
@@ -43,7 +43,6 @@ source:
   ids:
     guid:
       type: string
-
 process:
   field_guid: guid
   title: title
@@ -53,7 +52,9 @@ process:
     plugin: default_value
     default_value: "full_html"
   field_link: link
-  field_story_image: media:content['url']
+  field_image_url:
+    plugin: custom_image_url_parser
+    source: media:content
   created:
     plugin: callback
     callable: strtotime
