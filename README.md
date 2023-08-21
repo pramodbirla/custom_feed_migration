@@ -13,7 +13,7 @@ modules/custom/custom_feed_migration
 enable this module 
 
 than run command 
-drush migrate:import custom_feed_migration
+drush migrate:import article
 check latest nodes available in article content type.
 
 I have created a view "current top post" and display all top post on page /current-top-posts
