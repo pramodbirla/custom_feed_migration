@@ -14,10 +14,10 @@ function custom_feed_migration_install() {
 /**
  * Implements hook_cron().
  */
-function custom_feed_migration_cron() {
-  // Delete nodes that are not present in the XML feed.
-  custom_module_delete_non_matching_nodes();
-}
+// function custom_feed_migration_cron() {
+//   // Delete nodes that are not present in the XML feed.
+//   custom_module_delete_non_matching_nodes();
+// }
 
 function custom_module_delete_non_matching_nodes() {
   // Fetch data from the external XML feed.
