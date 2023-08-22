@@ -1,3 +1,62 @@
 <?php
 
-?>
+use GuzzleHttp\Client;
+
+/**
+ * Implements hook_install().
+ */
+function custom_feed_migration_install() {
+  // Run the migration command.
+  // drush_invoke_process(NULL, 'migrate-import', array('article'), array(), array('yes' => TRUE));
+  exec('drush mim article');
+}
+
+/**
+ * Implements hook_cron().
+ */
+function custom_feed_migration_cron() {
+  // Delete nodes that are not present in the XML feed.
+  custom_module_delete_non_matching_nodes();
+}
+
+function custom_module_delete_non_matching_nodes() {
+  // Fetch data from the external XML feed.
+  $feed_url = 'http://feeds.feedburner.com/ndtvnews-top-stories.xml'; // Replace with your XML feed URL.
+  $client = new Client();
+  $response = $client->get($feed_url);
+  if ($response->getStatusCode() === 200) {
+    $xml = simplexml_load_string($response->getBody());
+    // Fetch existing nodes of the specified content type.
+    $query = \Drupal::entityQuery('node')
+      ->condition('type', 'article'); // Replace 'your_content_type' with your actual content type.
+
+    $node_ids = $query->execute();
+    $nodes = \Drupal\node\Entity\Node::loadMultiple($node_ids);
+
+    // Compare node titles and delete nodes that don't match.
+    foreach ($nodes as $node) {
+      $node_title = $node->getTitle();
+      $matched = false;
+
+      foreach ($xml->item as $item) {
+        if ($node_title === (string) $item->title) {
+          $matched = true;
+          break;
+        }
+      }
+
+      if (!$matched) {
+        $node->delete();
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function custom_feed_migration_uninstall() {
+  // Run the migration command.
+  // drush_invoke_process(NULL, 'migrate-import', array('article'), array(), array('yes' => TRUE));
+  exec('drush mr article');
+}
