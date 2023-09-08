@@ -1,0 +1,7 @@
+enabled: true
+feed_url: 'http://feeds.feedburner.com/ndtvnews-top-stories.xml'
+source_key:
+  plugin: 'default_value'
+  default_value: 'guid'
+migration_tags:
+  - 'article'
