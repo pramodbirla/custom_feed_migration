@@ -7,3 +7,5 @@ dependencies:
   - drupal:migrate
   - drupal:migrate_plus
   - drupal:migrate_tools
+config_install:
+  - custom_feed_migration.settings
