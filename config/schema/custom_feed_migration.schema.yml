@@ -1,0 +1,10 @@
+custom_feed_migration.settings:
+  type: mapping
+  label: 'Custom Feed Migration Settings'
+  mapping:
+    enabled:
+      type: boolean
+      label: 'Enabled'
+    feed_url:
+      type: string
+      label: 'Feed URL'
